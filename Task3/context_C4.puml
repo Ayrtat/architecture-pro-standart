@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title C4 Context Diagram - Система депозитов
+
+Person(newClient, "Новый клиент", "Подает заявку на депозит через сайт банка")
+Person(existingClient, "Существующий клиент", "Подает заявку на депозит через интернет-банк")
+Person(callCenterAgent, "Сотрудник кол-центра", "Обрабатывает заявки новых клиентов, звонит для уточнения условий")
+Person(backOffice, "Сотрудник бэк-офиса", "Обрабатывает заявки в АБС")
+
+System(depositSystem, "Система депозитов", "Управление депозитными продуктами: прием заявок, расчет персонализированных ставок, обработка заявок")
+
+System(absSystem, "АБС (Автоматизированная банковская система)", "Данные клиентов, счета, депозитные продукты, создание депозитов")
+System(crmSystem, "CRM система кол-центра", "Управление заявками новых клиентов, назначение менеджеров")
+
+System_Ext(smsGateway, "SMS Gateway", "Внешний сервис для отправки SMS-сообщений")
+
+Rel(newClient, depositSystem, "Подает заявку на депозит", "HTTPS")
+Rel(existingClient, depositSystem, "Подает заявку на депозит с персонализированными ставками", "HTTPS")
+Rel(callCenterAgent, crmSystem, "Обрабатывает заявки новых клиентов", "HTTPS")
+Rel(backOffice, absSystem, "Обрабатывает заявки в АБС", "Web-интерфейс")
+
+Rel(depositSystem, absSystem, "Получает данные клиентов, создает заявки, получает ставки", "HTTPS/JSON")
+Rel(depositSystem, crmSystem, "Передает заявки новых клиентов", "Kafka")
+Rel(crmSystem, absSystem, "Создает заявки после обработки", "HTTPS")
+Rel(absSystem, smsGateway, "Отправляет SMS для верификации", "HTTPS/API")
+
+@enduml

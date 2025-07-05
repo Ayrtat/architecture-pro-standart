@@ -1,0 +1,46 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Диаграмма контекста - Система управления кредитными заявками
+
+Person(client, "Клиент", "Подает заявки в отделении банка")
+Person(manager, "Менеджер отделения", "Заводит заявки в АБС")
+Person(creditOfficer, "Сотрудник кредитования", "Обрабатывает заявки в Кредитном конвейере")
+Person(internetBankClient, "Клиент интернет-банка", "Зарегистрированный клиент банка")
+Person(newClient, "Новый клиент", "Подает заявку через сайт банка")
+
+System(creditManagementSystem, "Система управления кредитными заявками", "Обеспечивает предодобренные кредитные предложения для клиентов через различные каналы")
+
+System_Ext(abs, "АБС", "Автоматизированная банковская система")
+System_Ext(creditPipeline, "Кредитный конвейер", "Система обработки кредитных заявок на базе Camunda BPM")
+System_Ext(scoringSystem, "Система кредитного скоринга", "Расчет кредитного рейтинга клиентов")
+System_Ext(internetBank, "Интернет-банк", "Система дистанционного банковского обслуживания")
+System_Ext(website, "Сайт банка", "Публичный сайт для новых клиентов")
+System_Ext(bkiApi, "API БКИ", "Бюро кредитных историй")
+System_Ext(smsGateway, "SMS-шлюз", "Внешний сервис отправки SMS")
+
+' Связи с клиентами
+Rel(client, manager, "Подает заявку на кредит")
+Rel(manager, abs, "Заводит заявку в систему")
+Rel(creditOfficer, creditPipeline, "Обрабатывает кредитные заявки")
+
+Rel(internetBankClient, internetBank, "Запрашивает предодобренные предложения")
+Rel(newClient, website, "Просматривает условия кредита, подает заявку")
+
+' Связи системы управления кредитными заявками
+Rel(internetBank, creditManagementSystem, "Запрашивает предодобренные предложения", "REST API")
+Rel(website, creditManagementSystem, "Запрашивает условия кредита", "REST API")
+
+Rel(creditManagementSystem, abs, "Читает данные клиентов, создает заявки", "REST API")
+Rel(creditManagementSystem, creditPipeline, "Запрашивает условия кредитования", "REST API")
+Rel(creditManagementSystem, scoringSystem, "Запрашивает кредитный скоринг", "REST API")
+
+' Связи внешних систем
+Rel(scoringSystem, bkiApi, "Запрашивает кредитную историю", "REST API")
+Rel(abs, smsGateway, "Отправляет SMS-уведомления", "REST API")
+
+' SMS-уведомления клиентам
+Rel(smsGateway, internetBankClient, "SMS-код подтверждения", "SMS")
+Rel(smsGateway, newClient, "SMS о визите в отделение", "SMS")
+
+@enduml

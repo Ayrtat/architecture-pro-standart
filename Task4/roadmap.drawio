@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.2.0">
+  <diagram id="BankStandardRoadmap" name="RoadMap Банк Стандарт">
+    <mxGraphModel dx="1426" dy="751" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2339" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="q1-bg" value="" style="shape=rect;fillColor=#fff2cc;strokeColor=none;fontSize=24;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=5;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="170" y="100" width="400" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="q2-bg" value="" style="shape=rect;fillColor=#fff2cc;strokeColor=none;fontSize=24;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=5;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="570" y="100" width="490" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="q1-header" value="Q1 2025" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;fontStyle=1;align=center;rounded=0;fontColor=#333333;" parent="1" vertex="1">
+          <mxGeometry x="170" y="50" width="480" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="q2-header" value="Q2 2025" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;fontStyle=1;align=center;rounded=0;fontColor=#333333;" parent="1" vertex="1">
+          <mxGeometry x="660" y="50" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="abs-label" value="Система управления депозитами" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="20" y="100" width="140" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="inet-label" value="Интернет-банк" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="20" y="290" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="site-label" value="Сайт" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="20" y="560" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="call-label" value="Система&#xa;кол-центра" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="20" y="370" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="partner-label" value="Партнерский&#xa;кол-центр" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="20" y="670" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="t18" value="&lt;font&gt;T4 - Деплой SFTP сервера&lt;/font&gt;" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="460" y="200" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="t6" value="T9 - Интеграция с SFTP" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=5;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="660" y="670" width="190" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-1" value="T5 - Индивидуализация ставок" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="100" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-7" value="T3 - Создание Deposit Management Service API&amp;nbsp; для управления депозитами" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="420" y="100" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-8" value="T1 - Создание Rate Management Service API&amp;nbsp; для расчета ставок" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="170" y="100" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-10" value="T6 - Интеграция системы управления депозитами с CRM" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="370" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-12" value="АБС" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="20" y="460" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-13" value="T2 - Доработка функциональности: SMS-сообщения о статусах заявок" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="170" y="460" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-14" value="T8 - Создания заявок на депозит" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="850" y="560" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="M1TeQa86rvyfK-Ncs1oR-16" value="T7 - Создания заявок на депозит" style="shape=rect;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;html=1;whiteSpace=wrap;align=center;verticalAlign=top;spacing=5;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="850" y="280" width="200" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,41 @@
+@startuml C4_Container_MVP_Deposits
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Диаграмма контейнеров
+
+Person(client, "Клиент банка", "Хочет открыть депозит")
+Person(operatorInternal, "Оператор внутреннего кол-центра", "Консультирует клиентов по ставкам")
+Person(operatorPartner, "Оператор партнёрского кол-центра", "Консультирует клиентов по ставкам")
+
+System_Boundary(bankSystem, "Банк Стандарт") {
+    Container(webApp, "Web Application", "React/Angular", "Интерфейс для клиентов и администраторов")
+    Container(apiGateway, "API Gateway", "Spring Boot", "Единая точка входа для всех API")
+    Container(rateMgmt, "Rate Management Service", "ASP.NET Core", "Управление ставками: базовые ставки, персонализация, расчеты")
+    Container(notificationService, "Notification Service", "Spring Boot", "Уведомления об изменениях ставок")
+    Container(fileExportService, "File Export Service", "Spring Boot", "Экспорт ставок в файлы XLS/CSV")
+    ContainerDb(database, "Database", "PostgreSQL", "Хранение данных о депозитах и ставках")
+    Container(sftpServer, "SFTP Server", "Linux/OpenSSH", "Передача файлов партнёрам")
+
+    System(internalCallcenter, "Внутренний кол-центр", "Система кол-центра банка")
+}
+System_Ext(partnerCallcenter, "Партнёрский кол-центр", "Внешняя система партнёра")
+
+Rel(client, webApp, "Просматривает ставки, открывает депозиты", "HTTPS")
+Rel(client, operatorInternal, "Звонит для консультации", "Телефон")
+Rel(client, operatorPartner, "Звонит для консультации", "Телефон")
+
+
+Rel(webApp, apiGateway, "API вызовы", "HTTPS/JSON")
+Rel(apiGateway, rateMgmt, "Запросы по депозитам", "HTTP/JSON")
+Rel(rateMgmt, database, "Чтение/запись данных", "SQL")
+Rel(rateMgmt, notificationService, "Уведомления об изменениях", "HTTP/JSON")
+Rel(notificationService, fileExportService, "Триггер экспорта", "HTTP/JSON")
+Rel(fileExportService, database, "Чтение ставок", "SQL")
+Rel(fileExportService, sftpServer, "Загрузка файлов", "SFTP")
+
+Rel(internalCallcenter, apiGateway, "Получение актуальных ставок", "HTTPS/JSON")
+Rel(operatorInternal, internalCallcenter, "Работает в системе", "Web UI")
+Rel(partnerCallcenter, sftpServer, "Загрузка файлов со ставками", "SFTP")
+Rel(operatorPartner, partnerCallcenter, "Работает в системе", "Web UI")
+
+@enduml
