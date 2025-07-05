@@ -1,0 +1,63 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title C4 Container Diagram
+
+Person(newClient, "Новый клиент")
+Person(existingClient, "Существующий клиент") 
+Person(callCenterAgent, "Сотрудник кол-центра")
+Person(backOffice, "Сотрудник бэк-офиса")
+
+System_Boundary(bank, "Банк Стандарт") {
+    Container(website, "Сайт банка", "React + HTML5", "Отображает список депозитов с актуальными ставками")
+    Container(internetBank, "Интернет-банк", "ASP.NET", "Персонализированные ставки для существующих клиентов")
+
+    Container(apiGateway, "API Gateway", "ASP.NET Core", "Маршрутизация запросов, аутентификация")
+    
+    Container(depositService, "Deposit Service", "ASP.NET Core", "Управление заявками: создание, статусы, валидация")
+    Container(rateService, "Rate Management Service", "ASP.NET Core", "Управление ставками: базовые ставки, персонализация, расчеты")
+    
+    Container(kafkaMQ, "Message Queue", "Kafka", "Асинхронная передача заявок")
+
+    ContainerDb(depositDb, "Deposit Database", "PostgreSQL", "Заявки на депозиты, статусы")
+    ContainerDb(rateDb, "Rate Database", "PostgreSQL", "Базовые ставки, правила персонализации, история изменений")
+    
+    System_Boundary(absSystem, "АБС") {
+        Container(abs, "ABS", "Java Spring Boot", "Данные клиентов, счета, депозитные продукты")
+        Container(absDB, "ABS DB", "Oracle", "База данных АБС")
+    }
+    
+    System_Boundary(callCenter, "Система кол-центра") {
+        Container(crm, "CRM система", "ASP.NET Core", "Управление заявками новых клиентов")
+        ContainerDb(crmDb, "CRM Database", "PostgreSQL", "Заявки новых клиентов")
+    }
+}
+
+System_Ext(smsGateway, "SMS Gateway", "Внешний сервис для SMS")
+
+Rel(newClient, website, "Подает заявку", "HTTPS")
+Rel(existingClient, internetBank, "Подает заявку", "HTTPS")
+Rel(callCenterAgent, crm, "Обрабатывает заявки", "HTTPS")
+Rel(backOffice, abs, "Обрабатывает в АБС", "Web")
+
+Rel(website, apiGateway, "API запросы", "JSON/HTTPS")
+Rel(internetBank, apiGateway, "API запросы", "JSON/HTTPS")
+
+Rel(apiGateway, depositService, "Заявки", "JSON/HTTP")
+Rel(apiGateway, rateService, "Ставки", "JSON/HTTP")
+
+Rel(depositService, rateService, "Получает ставки", "JSON/HTTP")
+Rel(depositService, kafkaMQ, "Передает заявки", "Kafka")
+Rel(depositService, depositDb, "Заявки", "SQL")
+
+Rel(rateService, rateDb, "Ставки и правила", "SQL")
+Rel(rateService, abs, "Данные клиентов для персонализации", "HTTPS")
+
+Rel(crm, kafkaMQ, "Получает заявки", "Kafka")
+Rel(crm, crmDb, "Данные CRM", "SQL")
+Rel(crm, abs, "Создает заявки", "HTTPS")
+
+Rel(abs, absDB, "Данные", "SQL")
+Rel(abs, smsGateway, "SMS", "HTTPS/API")
+
+@enduml

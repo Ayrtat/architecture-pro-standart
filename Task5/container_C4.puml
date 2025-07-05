@@ -1,0 +1,83 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Клиент", "Подает заявки в отделении")
+Person(manager, "Менеджер отделения", "Заводит заявки в АБС")
+Person(creditOfficer, "Сотрудник кредитования", "Обрабатывает заявки в Кредитном конвейере")
+Person(internetBankClient, "Клиент интернет-банка", "Зарегистрированный клиент")
+Person(newClient, "Новый клиент", "Подает заявку через сайт")
+
+System_Ext(internetBank, "Интернет-банк")
+System_Ext(website, "Сайт банка", "Публичный сайт для новых клиентов")
+System_Ext(bkiApi, "API БКИ", "Бюро кредитных историй")
+System_Ext(smsGateway, "SMS-шлюз", "Внешний сервис отправки SMS")
+
+System_Boundary(absSystem, "АБС") {
+    Container(abs, "АБС", "Банковская система", "Заявки, клиенты, платежи, SMS")
+    ContainerDb(absDb, "АБС БД", "Oracle/DB2", "Данные клиентов и заявок")
+}
+
+System_Boundary(creditPipelineSystem, "Кредитный конвейер") {
+    Container(camunda, "Camunda BPM", "Java/Camunda", "Бизнес-процессы кредитования")
+    ContainerDb(pipelineDb, "Pipeline DB", "Oracle", "Заявки, процессы, решения")
+}
+
+System_Boundary(scoringSystemBoundary, "Система кредитного скоринга") {
+    Container(scoringService, "Scoring Service", "Java/Python", "Расчет кредитного скоринга")
+    ContainerDb(scoringDb, "Scoring DB", "PostgreSQL", "Модели скоринга, история")
+}
+
+System_Boundary(creditManagementSystem, "Система управления кредитными заявками") {
+    Container(apiGateway, "API Gateway", "ASP.NET", "Маршрутизация и аутентификация")
+    Container(creditService, "Credit Service", "Java/Spring Boot", "Управление заявками по кредитам")
+    Container(preapprovalBatchService, "Preapproval Batch Service", "Java/Spring Boot", "Массовый расчет предодобренных предложений")
+    Container(preapprovalScheduler, "Preapproval Scheduler", "Java/Spring Boot", "Планировщик расчета предложений")
+
+    ContainerDb(creditDb, "Credit DB", "MS SQL", "Предодобренные предложения, результаты скоринга")
+}
+
+' Существующие связи
+Rel(client, manager, "Подает заявку")
+Rel(manager, abs, "Заводит заявку")
+Rel(creditOfficer, camunda, "Обрабатывает заявки")
+
+Rel(abs, absDb, "Читает/записывает данные")
+Rel(camunda, pipelineDb, "Читает/записывает процессы")
+Rel(scoringService, scoringDb, "Читает модели/записывает историю")
+Rel(creditService, creditDb, "Читает/записывает предложения")
+Rel(preapprovalBatchService, creditDb, "Записывает предодобренные предложения")
+
+Rel(absDb, pipelineDb, "ETL заявок (batch, 1/день)")
+Rel(pipelineDb, absDb, "ETL статусов (batch, 1/день)")
+Rel(absDb, scoringDb, "ETL данных клиентов (batch, 1/день)")
+
+Rel(camunda, scoringService, "REST - запрос скоринга")
+Rel(scoringService, bkiApi, "REST - запрос БКИ")
+Rel(preapprovalBatchService, scoringService, "REST - массовый запрос скоринга")
+
+' SMS-подтверждение через АБС
+Rel(abs, smsGateway, "REST - отправка SMS")
+Rel(internetBankClient, internetBankClient, "Получает SMS-код", "SMS")
+
+' Связи для интернет-банка
+Rel(internetBankClient, internetBank, "Запрашивает предложения")
+Rel(internetBank, apiGateway, "REST - запрос предложений")
+Rel(apiGateway, creditService, "Маршрутизация запросов")
+
+' Связи для сайта
+Rel(newClient, website, "Просматривает предложения, подает заявку")
+Rel(website, apiGateway, "REST - запрос условий кредита")
+Rel(apiGateway, creditService, "Маршрутизация запросов с сайта")
+
+' Preapproval Service работает с разными источниками
+Rel(creditService, camunda, "REST - запрос условий кредита")
+Rel(creditService, scoringService, "REST - запрос скоринга для новых клиентов")
+Rel(creditService, abs, "REST - создание заявки в АБС")
+
+' Batch обработка для предодобренных предложений
+Rel(preapprovalScheduler, preapprovalBatchService, "Запускает по расписанию")
+Rel(preapprovalBatchService, absDb, "Читает данные клиентов")
+' SMS о необходимости прийти в отделение отправляется АБС
+Rel(newClient, newClient, "Получает SMS о визите в отделение", "SMS")
+
+@enduml

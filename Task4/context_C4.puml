@@ -1,0 +1,27 @@
+@startuml C4_Context_MVP_Deposits
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Диаграмма контекста
+
+Person(client, "Клиент банка", "Хочет открыть депозит и получить консультацию по ставкам")
+Person(operatorInternal, "Оператор внутреннего кол-центра", "Консультирует клиентов по депозитным ставкам")
+Person(operatorPartner, "Оператор партнёрского кол-центра", "Консультирует клиентов по депозитным ставкам")
+
+System_Boundary(bankSystem, "Банк Стандарт") {
+    System(depositSystem, "Система управления депозитами", "Управляет депозитными ставками, продуктами и интеграцией с кол-центрами")
+    System(internalCallcenter, "Внутренний кол-центр", "Система кол-центра банка для консультирования клиентов")
+}
+
+System_Ext(partnerCallcenter, "Партнёрский кол-центр", "Внешняя система партнёра для консультирования клиентов")
+
+Rel(client, depositSystem, "Просматривает ставки, открывает депозиты", "HTTPS")
+Rel(client, operatorInternal, "Звонит для консультации по депозитам", "Телефон")
+Rel(client, operatorPartner, "Звонит для консультации по депозитам", "Телефон")
+
+Rel(operatorInternal, internalCallcenter, "Консультирует клиентов используя актуальные ставки", "Web UI")
+Rel(operatorPartner, partnerCallcenter, "Консультирует клиентов используя переданные ставки", "Web UI")
+
+Rel(depositSystem, internalCallcenter, "Предоставляет актуальные ставки в реальном времени", "HTTPS/JSON")
+Rel(depositSystem, partnerCallcenter, "Передаёт файлы со ставками", "SFTP")
+
+@enduml
